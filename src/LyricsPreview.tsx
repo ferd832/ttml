@@ -39,6 +39,13 @@ export default function LyricsPreview({
     return -1;
   }, [syncedLines, currentTime]);
 
+  // Проверяем, закончилась ли песня (после последней строки)
+  const isAfterLastLine = useMemo(() => {
+    if (syncedLines.length === 0) return false;
+    const lastLine = syncedLines[syncedLines.length - 1];
+    return currentTime > lastLine.startTime + 3; // 3 секунды после последней строки
+  }, [syncedLines, currentTime]);
+
   // Автопрокрутка
   useEffect(() => {
     if (
@@ -105,7 +112,13 @@ export default function LyricsPreview({
 
           // Фиксированный размер шрифта для всех строк
           const fontSize = '1.5rem';
-          const opacity = isActive ? 1 : Math.max(0.3, 1 - distance * 0.2);
+          
+          // Анимация растворения после последней строки
+          let opacity = isActive ? 1 : Math.max(0.3, 1 - distance * 0.2);
+          if (isAfterLastLine) {
+            opacity = Math.max(0, 1 - (currentTime - syncedLines[syncedLines.length - 1].startTime - 3) * 0.3);
+          }
+          
           const blur = isActive ? 0 : Math.min(1, distance * 0.3);
 
           return (
@@ -113,15 +126,17 @@ export default function LyricsPreview({
               key={line.id}
               ref={isActive ? activeLineRef : null}
               onClick={() => onLineClick(line.startTime)}
-              className="px-6 py-4 rounded-2xl cursor-pointer select-none transition-all duration-500"
+              className="px-6 py-4 rounded-2xl cursor-pointer select-none"
               style={{
                 opacity,
                 filter: `blur(${blur}px)`,
+                transform: isActive ? 'translateX(10px)' : 'translateX(0)',
+                transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
                 transformOrigin: 'left center',
               }}
             >
               <span
-                className="block transition-all duration-500"
+                className="block"
                 style={{
                   fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
                   fontSize,
@@ -130,6 +145,7 @@ export default function LyricsPreview({
                   color: isActive ? 'var(--accent-purple)' : 'var(--text-secondary)',
                   textShadow: isActive ? '0 0 30px var(--accent-glow), 0 0 60px var(--accent-glow)' : 'none',
                   lineHeight: 1.4,
+                  transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
               >
                 {line.text}

@@ -544,7 +544,7 @@ export default function App() {
           </div>
         </header>
 
-        <main className="max-w-7xl mx-auto px-4 py-6">
+        <main className="max-w-7xl mx-auto px-4 py-6 pb-40">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
             <div className="glass rounded-2xl p-5">
               <h3 className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: 'var(--text-muted)' }}><span className="text-lg">🪐</span>{t.trackInfo}</h3>
@@ -579,20 +579,6 @@ export default function App() {
               )}
             </div>
           </div>
-
-          {audioUrl && (
-            <div className="mb-6">
-              <AudioPlayer
-                ref={audioPlayerRef}
-                audioUrl={audioUrl}
-                audioFile={audioFile}
-                onTimeUpdate={handleTimeUpdate}
-                isSyncing={mode === 'sync'}
-                onPlayPause={setIsPlaying}
-                isPlaying={isPlaying}
-              />
-            </div>
-          )}
 
           {mode === 'sync' && (
             <div className="mb-4 glass rounded-xl p-4 flex items-center gap-4">
@@ -900,6 +886,23 @@ export default function App() {
             <p className="text-2xl mt-8" style={{ color: 'var(--text-secondary)' }}>
               {countdown > 0 ? 'Приготовьтесь...' : 'Синхронизация началась!'}
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* Sticky Audio Player at Bottom */}
+      {audioUrl && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 p-4 pointer-events-none">
+          <div className="max-w-7xl mx-auto pointer-events-auto">
+            <AudioPlayer
+              ref={audioPlayerRef}
+              audioUrl={audioUrl}
+              audioFile={audioFile}
+              onTimeUpdate={handleTimeUpdate}
+              isSyncing={mode === 'sync'}
+              onPlayPause={setIsPlaying}
+              isPlaying={isPlaying}
+            />
           </div>
         </div>
       )}
