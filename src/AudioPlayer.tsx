@@ -336,29 +336,38 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, AudioPlayerProps>(
   };
 
   return (
-    <div className="glass rounded-2xl p-5">
+    <div className="glass rounded-2xl p-4 shadow-lg">
       <audio ref={audioRef} src={audioUrl || undefined} preload="auto" />
-      <canvas ref={canvasRef} className="w-full h-28 rounded-xl cursor-pointer mb-4" style={{ display: 'block' }} onClick={handleSeek} />
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-2">
-          <button onClick={() => { if (audioRef.current) { audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5); segmentEndRef.current = null; } }} className="text-purple-300/70 hover-overlay transition-colors p-2 rounded-lg" title="Назад 5 сек">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.5 3C17.15 3 21.08 6.03 22.47 10.22L20.1 11C19.05 7.81 16.04 5.5 12.5 5.5C10.54 5.5 8.77 6.22 7.38 7.38L10 10H3V3L5.6 5.6C7.45 4 9.85 3 12.5 3M10 12H18V14H10V12M10 16H15V18H10V16Z"/></svg>
+      
+      {/* Compact waveform */}
+      <canvas ref={canvasRef} className="w-full h-12 rounded-lg cursor-pointer mb-3" style={{ display: 'block' }} onClick={handleSeek} />
+      
+      {/* Controls */}
+      <div className="flex items-center justify-between gap-3">
+        {/* Left: Play controls */}
+        <div className="flex items-center gap-1">
+          <button onClick={() => { if (audioRef.current) { audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5); segmentEndRef.current = null; } }} className="text-purple-300/60 hover:text-purple-200 transition-colors p-1.5 rounded-lg hover:bg-white/5" title="Назад 5 сек">
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.5 3C17.15 3 21.08 6.03 22.47 10.22L20.1 11C19.05 7.81 16.04 5.5 12.5 5.5C10.54 5.5 8.77 6.22 7.38 7.38L10 10H3V3L5.6 5.6C7.45 4 9.85 3 12.5 3M10 12H18V14H10V12M10 16H15V18H10V16Z"/></svg>
           </button>
-          <button onClick={togglePlay} className={`w-12 h-12 rounded-full flex items-center justify-center transition-all cosmic-btn ${isSyncing ? 'animate-pulse-cosmic' : ''}`}>
-            {isPlaying ? <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg> : <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>}
+          <button onClick={togglePlay} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all cosmic-btn ${isSyncing ? 'animate-pulse-cosmic' : ''}`}>
+            {isPlaying ? <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg> : <svg className="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>}
           </button>
-          <button onClick={() => { if (audioRef.current) { audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 5); segmentEndRef.current = null; } }} className="text-purple-300/70 hover-overlay transition-colors p-2 rounded-lg" title="Вперёд 5 сек">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.5 3C6.85 3 2.92 6.03 1.53 10.22L3.9 11C4.95 7.81 7.96 5.5 11.5 5.5C13.46 5.5 15.23 6.22 16.62 7.38L14 10H21V3L18.4 5.6C16.55 4 14.15 3 11.5 3M14 12H6V14H14V12M14 16H9V18H14V16Z"/></svg>
+          <button onClick={() => { if (audioRef.current) { audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 5); segmentEndRef.current = null; } }} className="text-purple-300/60 hover:text-purple-200 transition-colors p-1.5 rounded-lg hover:bg-white/5" title="Вперёд 5 сек">
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M11.5 3C6.85 3 2.92 6.03 1.53 10.22L3.9 11C4.95 7.81 7.96 5.5 11.5 5.5C13.46 5.5 15.23 6.22 16.62 7.38L14 10H21V3L18.4 5.6C16.55 4 14.15 3 11.5 3M14 12H6V14H14V12M14 16H9V18H14V16Z"/></svg>
           </button>
         </div>
-        <div className="text-sm text-purple-200/70 font-mono">{formatTimeShort(currentTime)} / {formatTimeShort(duration)}</div>
-        <div className="flex items-center gap-4">
-          <button onClick={() => { const speeds = [0.5, 0.75, 1, 1.25, 1.5]; const idx = (speeds.indexOf(playbackRate) + 1) % speeds.length; setPlaybackRate(speeds[idx]); if (audioRef.current) audioRef.current.playbackRate = speeds[idx]; }} className="px-2.5 py-1 hover-overlay border border-purple-500/20 rounded-md text-xs text-purple-200 hover:border-purple-500/50 transition-colors font-mono" title="Скорость воспроизведения">
+        
+        {/* Center: Time */}
+        <div className="text-xs text-purple-200/60 font-mono">{formatTimeShort(currentTime)} / {formatTimeShort(duration)}</div>
+        
+        {/* Right: Speed and Volume */}
+        <div className="flex items-center gap-2">
+          <button onClick={() => { const speeds = [0.5, 0.75, 1, 1.25, 1.5]; const idx = (speeds.indexOf(playbackRate) + 1) % speeds.length; setPlaybackRate(speeds[idx]); if (audioRef.current) audioRef.current.playbackRate = speeds[idx]; }} className="px-2 py-0.5 hover-overlay border border-purple-500/20 rounded text-xs text-purple-200/70 hover:border-purple-500/40 transition-colors font-mono" title="Скорость">
             {playbackRate}x
           </button>
-          <div className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-purple-300/60" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-            <input type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolumeChange} className="w-20 h-1" />
+          <div className="flex items-center gap-1.5">
+            <svg className="w-3.5 h-3.5 text-purple-300/50" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            <input type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolumeChange} className="w-16 h-0.5" />
           </div>
         </div>
       </div>

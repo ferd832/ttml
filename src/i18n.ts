@@ -159,7 +159,7 @@ export const translations: Record<Language, TranslationKeys> = {
     subtitle: 'TTML STUDIO • СИНХРОНИЗАЦИЯ ТЕКСТОВ',
     editor: '✏️ Редактор',
     sync: '🎵 Синхронизация',
-    review: '👁 Просмотр',
+    review: '👁 Предпросмотр',
     download: 'Скачать',
     undo: 'Отменить (Ctrl+Z)',
     redo: 'Повторить (Ctrl+Shift+Z)',
