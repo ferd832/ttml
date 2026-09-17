@@ -7,7 +7,7 @@ import StarField from './StarField';
 import HelpModal from './HelpModal';
 import LyricsPreview from './LyricsPreview';
 import Login from './Login';
-import { supabase } from './supabaseClient';
+import { supabase, isSupabaseConfigured } from './supabaseClient';
 import { useUndoRedo } from './useUndoRedo';
 import { useLanguage } from './contexts';
 import { languageNames, Language } from './i18n';
@@ -118,6 +118,13 @@ export default function App() {
 
   // Check authentication session
   useEffect(() => {
+    // Если Supabase не настроен, пропускаем авторизацию
+    if (!isSupabaseConfigured() || !supabase) {
+      setSession({ user: { email: 'demo@planet.music' } }); // Демо-сессия
+      setLoading(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
@@ -131,7 +138,11 @@ export default function App() {
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    } else {
+      setSession(null);
+    }
   };
 
   // Auto-save to localStorage with timestamp
