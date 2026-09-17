@@ -451,38 +451,7 @@ export default function App() {
         <header className="glass-strong sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-4">
-              <div className="relative group">
-                <div className="w-14 h-14 relative animate-spin-slow">
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    {/* Кольца Сатурна */}
-                    <ellipse cx="50" cy="50" rx="45" ry="12" fill="none" stroke="url(#ringGradient1)" strokeWidth="3" opacity="0.6"/>
-                    <ellipse cx="50" cy="50" rx="40" ry="10" fill="none" stroke="url(#ringGradient2)" strokeWidth="2" opacity="0.4"/>
-                    
-                    {/* Планета */}
-                    <defs>
-                      <radialGradient id="planetGradient" cx="40%" cy="40%">
-                        <stop offset="0%" stopColor="#c084fc"/>
-                        <stop offset="50%" stopColor="#a78bfa"/>
-                        <stop offset="100%" stopColor="#7c3aed"/>
-                      </radialGradient>
-                      <linearGradient id="ringGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#f0abfc"/>
-                        <stop offset="50%" stopColor="#c084fc"/>
-                        <stop offset="100%" stopColor="#a78bfa"/>
-                      </linearGradient>
-                      <linearGradient id="ringGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#e9d5ff"/>
-                        <stop offset="100%" stopColor="#d8b4fe"/>
-                      </linearGradient>
-                    </defs>
-                    <circle cx="50" cy="50" r="20" fill="url(#planetGradient)"/>
-                    
-                    {/* Блик */}
-                    <circle cx="42" cy="42" r="6" fill="white" opacity="0.3"/>
-                  </svg>
-                </div>
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 rounded-full blur opacity-30 group-hover:opacity-50 transition-opacity"></div>
-              </div>
+
               <div>
                 <h1 className="text-2xl font-black cosmic-text tracking-wider">PLANET MUSIC</h1>
               </div>
@@ -911,30 +880,6 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-col items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 relative animate-spin-slow">
-                <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <ellipse cx="50" cy="50" rx="45" ry="12" fill="none" stroke="url(#ringGradient1)" strokeWidth="3" opacity="0.6"/>
-                  <ellipse cx="50" cy="50" rx="40" ry="10" fill="none" stroke="url(#ringGradient2)" strokeWidth="2" opacity="0.4"/>
-                  <defs>
-                    <radialGradient id="planetGradient" cx="40%" cy="40%">
-                      <stop offset="0%" stopColor="#c084fc"/>
-                      <stop offset="50%" stopColor="#a78bfa"/>
-                      <stop offset="100%" stopColor="#7c3aed"/>
-                    </radialGradient>
-                    <linearGradient id="ringGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#f0abfc"/>
-                      <stop offset="50%" stopColor="#c084fc"/>
-                      <stop offset="100%" stopColor="#a78bfa"/>
-                    </linearGradient>
-                    <linearGradient id="ringGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#e9d5ff"/>
-                      <stop offset="100%" stopColor="#d8b4fe"/>
-                    </linearGradient>
-                  </defs>
-                  <circle cx="50" cy="50" r="20" fill="url(#planetGradient)"/>
-                  <circle cx="42" cy="42" r="6" fill="white" opacity="0.3"/>
-                </svg>
-              </div>
               <span className="text-lg font-bold cosmic-text tracking-wider">PLANET MUSIC</span>
             </div>
             <div className="cosmic-divider w-full max-w-xs"></div>
