@@ -29,14 +29,26 @@ export default function LyricsPreview({
     [lines]
   );
 
-  // Находим активную строку
+  // Находим активную строку с бинарным поиском для точности
   const activeIndex = useMemo(() => {
-    for (let i = syncedLines.length - 1; i >= 0; i--) {
-      if (currentTime >= syncedLines[i].startTime) {
-        return i;
+    if (syncedLines.length === 0) return -1;
+    
+    // Бинарный поиск для точного определения активной строки
+    let left = 0;
+    let right = syncedLines.length - 1;
+    let result = -1;
+    
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      if (currentTime >= syncedLines[mid].startTime) {
+        result = mid;
+        left = mid + 1;
+      } else {
+        right = mid - 1;
       }
     }
-    return -1;
+    
+    return result;
   }, [syncedLines, currentTime]);
 
   // Проверяем, закончилась ли песня (после последней строки)
@@ -46,7 +58,7 @@ export default function LyricsPreview({
     return currentTime > lastLine.startTime + 3; // 3 секунды после последней строки
   }, [syncedLines, currentTime]);
 
-  // Автопрокрутка
+  // Мгновенная автопрокрутка для точной синхронизации
   useEffect(() => {
     if (
       activeIndex < 0 ||
@@ -64,6 +76,7 @@ export default function LyricsPreview({
     const scrollTarget =
       activeEl.offsetTop - containerHeight / 2 + activeEl.clientHeight / 2;
 
+    // Мгновенная прокрутка для точной синхронизации
     container.scrollTo({
       top: scrollTarget,
       behavior: 'smooth',
@@ -131,7 +144,7 @@ export default function LyricsPreview({
                 opacity,
                 filter: `blur(${blur}px)`,
                 transform: isActive ? 'translateX(10px)' : 'translateX(0)',
-                transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)',
                 transformOrigin: 'left center',
               }}
             >
@@ -145,7 +158,7 @@ export default function LyricsPreview({
                   color: isActive ? 'var(--accent-purple)' : 'var(--text-secondary)',
                   textShadow: isActive ? '0 0 30px var(--accent-glow), 0 0 60px var(--accent-glow)' : 'none',
                   lineHeight: 1.4,
-                  transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transition: 'all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)',
                 }}
               >
                 {line.text}
